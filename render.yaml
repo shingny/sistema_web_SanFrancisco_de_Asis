@@ -1,0 +1,81 @@
+# ============================================================
+# Blueprint de Render — San Francisco de Asís
+#
+# Crea 3 Web Services (gateway + 2 microservicios) y 2 Sitios
+# Estáticos (frontend de cliente y panel de tienda).
+#
+# Cómo usar:
+#   1. Sube este archivo a la raíz del repositorio y haz push.
+#   2. En Render: New > Blueprint > selecciona el repositorio.
+#   3. Ajusta los nombres si quieres URLs diferentes y deploy.
+#
+# Las URLs generadas serán:
+#   Gateway   https://sfa-gateway.onrender.com
+#   Pedidos   https://sfa-pedidos.onrender.com
+#   Separado  https://sfa-separado.onrender.com
+#   Cliente   https://sfa-frontend.onrender.com/index.html
+#   Panel     https://sfa-panel.onrender.com/login.html
+# ============================================================
+
+services:
+
+  # ---------------- Microservicio 1: Pedidos ----------------
+  - type: web
+    name: sfa-pedidos
+    runtime: python
+    rootDir: microservicio-pedidos
+    plan: free
+    buildCommand: pip install -r ../requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /
+
+  # ------------- Microservicio 2: Separado de tortas ----------
+  - type: web
+    name: sfa-separado
+    runtime: python
+    rootDir: microservicio-separado
+    plan: free
+    buildCommand: pip install -r ../requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /
+
+  # -------------------- API Gateway --------------------------
+  - type: web
+    name: sfa-gateway
+    runtime: python
+    rootDir: gateway
+    plan: free
+    buildCommand: pip install -r ../requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /
+    envVars:
+      # URLs públicas de los microservicios (ajústalas si cambias los nombres)
+      - key: PEDIDOS_URL
+        value: https://sfa-pedidos.onrender.com
+      - key: SEPARADO_URL
+        value: https://sfa-separado.onrender.com
+      # Credenciales del panel de tienda (cámbialas)
+      - key: PANEL_USER
+        value: admin
+      - key: PANEL_PASSWORD
+        value: san-francisco-2024
+      - key: PANEL_TOKEN
+        value: sfa-token-render-2024
+
+  # --------------- Frontend de cliente (estático) -------------
+  - type: web
+    name: sfa-frontend
+    runtime: static
+    rootDir: frontend-cliente
+    staticPublishPath: .
+    # Importante: edita static/js/config.js y coloca la URL de tu gateway,
+    # p. ej. https://sfa-gateway.onrender.com, para que el frontend consuma la API.
+
+  # ---------------- Panel de tienda (estático) ----------------
+  - type: web
+    name: sfa-panel
+    runtime: static
+    rootDir: panel-tienda
+    staticPublishPath: .
+    # Importante: edita static/js/config.js y coloca la URL de tu gateway,
+    # p. ej. https://sfa-gateway.onrender.com, para que el panel consuma la API.

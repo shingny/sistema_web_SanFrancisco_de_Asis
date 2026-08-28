@@ -188,6 +188,38 @@ Levanta el gateway (:5000) y los dos microservicios (:5001, :5002). Los archivos
 
 ---
 
+## Desplegar en Render (cloud)
+
+El proyecto incluye un blueprint `render.yaml` que crea **3 Web Services** y **2 Sitios Estáticos**:
+
+| Servicio | Tipo | Carpeta |
+| -------- | ---- | ------- |
+| `sfa-gateway` | Web Service (Flask) | `gateway/` |
+| `sfa-pedidos` | Web Service (Flask) | `microservicio-pedidos/` |
+| `sfa-separado` | Web Service (Flask) | `microservicio-separado/` |
+| `sfa-frontend` | Static Site | `frontend-cliente/` |
+| `sfa-panel` | Static Site | `panel-tienda/` |
+
+### Pasos
+
+1. **Configura la URL del gateway** (2 archivos):
+   - `frontend-cliente/static/js/config.js` → `API_BASE` con tu URL de gateway (`https://sfa-gateway.onrender.com`).
+   - `panel-tienda/static/js/config.js` → lo mismo.
+2. **Haz push** del `render.yaml` a GitHub.
+3. En Render: **New → Blueprint** → elige el repositorio → **Apply**. Render crea y despliega los 5 servicios automáticamente.
+4. Si cambias los nombres de los servicios, actualiza en `render.yaml`:
+   - `PEDIDOS_URL` y `SEPARADO_URL` del gateway.
+   - `API_BASE` de los frontends.
+
+### Consideraciones importantes de Render
+
+- **Puerto:** cada microservicio ya escucha en la variable `PORT` que inyecta Render (con `gunicorn app:app`).
+- **SQLite es efímero:** en el plan free, el disco se reinicia al redeploy y los pedidos/reservas se pierden. Para datos reales usa un **PostgreSQL** de Render (agrega `DATABASE_URL` en cada microservicio y configura `SQLALCHEMY_DATABASE_URI`). El código está preparado para migrar de SQLite a PostgreSQL.
+- **Sleep del plan free:** los servicios de plan free se duermen tras ~15 min sin uso; la primera visita tarda unos segundos en "despertarlos".
+- **CORS:** el gateway permite todos los orígenes, así que los Static Sites pueden consumir la API sin problemas.
+
+---
+
 ## Buenas prácticas implementadas
 
 - Microservicios independientes: **no comparten base de datos**.

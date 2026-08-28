@@ -1,4 +1,4 @@
-// Configuración central del frontend de cliente.
+// Configuración central del panel de tienda.
 // API_BASE apunta al API Gateway.
 //
 // Local:  http://localhost:5000

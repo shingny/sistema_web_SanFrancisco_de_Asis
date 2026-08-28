@@ -16,7 +16,8 @@ class Config:
     """Parámetros de configuración del API Gateway."""
 
     HOST = os.getenv("GATEWAY_HOST", "0.0.0.0")
-    PORT = int(os.getenv("GATEWAY_PORT", "5000"))
+    # En Render la plataforma inyecta la variable PORT automáticamente.
+    PORT = int(os.getenv("PORT") or os.getenv("GATEWAY_PORT") or "5000")
 
     # URL internas de los microservicios
     PEDIDOS_URL = os.getenv("PEDIDOS_URL", "http://127.0.0.1:5001")
