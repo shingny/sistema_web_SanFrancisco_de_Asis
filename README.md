@@ -220,6 +220,45 @@ El proyecto incluye un blueprint `render.yaml` que crea **3 Web Services** y **2
 
 ---
 
+## Desplegar en Alwaysdata (hosting europeo)
+
+Alwaysdata ejecuta Python vía **WSGI (Phusion Passenger)**, no con `python app.py`. El repo ya incluye el archivo `passenger_wsgi.py` dentro de cada microservicio para ello.
+
+### Estructura de sitios (en tu panel Alwaysdata)
+
+| Sitio | Tipo | Application path / carpeta | Entry point | URL sugerida |
+| ----- | ---- | -------------------------- | ----------- | ------------ |
+| `sfa-pedidos` | Python | `microservicio-pedidos/` | `passenger_wsgi.py` | `sfa-pedidos.tu-usuario.alwaysdata.net` |
+| `sfa-separado` | Python | `microservicio-separado/` | `passenger_wsgi.py` | `sfa-separado.tu-usuario.alwaysdata.net` |
+| `sfa-gateway` | Python | `gateway/` | `passenger_wsgi.py` | `sfa-gateway.tu-usuario.alwaysdata.net` |
+| `sfa-frontend` | Static | `frontend-cliente/` | — | `sfa-frontend.tu-usuario.alwaysdata.net` |
+| `sfa-panel` | Static | `panel-tienda/` | — | `sfa-panel.tu-usuario.alwaysdata.net` |
+
+### Pasos
+
+1. **Sube el código** al servidor (git clone, FTP o el "git deploy" de Alwaysdata).
+2. **Instala las dependencias** desde la carpeta del repo:
+   ```bash
+   # Acceso SSH (o en VPS): crea/usa un entorno virtual
+   mkdir -p ~/venvs && python3 -m venv ~/venvs/sfa && ~/venvs/sfa/bin/pip install -r requirements.txt
+   ```
+   Y configura ese entorno como "Python interpreter" de tus sitios Python (en Alwaysdata: Sites → tu sitio → Configuration).
+3. **Crea los 5 sitios** del cuadro anterior.
+4. **Variables de entorno** del gateway (en Alwaysdata: Sites → sfa-gateway → Environment variables):
+   - `PEDIDOS_URL=https://sfa-pedidos.tu-usuario.alwaysdata.net`
+   - `SEPARADO_URL=https://sfa-separado.tu-usuario.alwaysdata.net`
+   - (opcional) `PANEL_USER`, `PANEL_PASSWORD`, `PANEL_TOKEN`.
+   > Las variables del panel de Alwaysdata tienen prioridad sobre el `.env`.
+5. **Configura `API_BASE`** en `frontend-cliente/static/js/config.js` y `panel-tienda/static/js/config.js` con `https://sfa-gateway.tu-usuario.alwaysdata.net`.
+
+### Base de datos en Alwaysdata (SQLite)
+
+- El proyecto usa **SQLite** por servicio (`microservicio-pedidos/database/pedidos.db` y `microservicio-separado/database/reservas.db`). En Alwaysdata el disco es **persistente**, así que los datos sobreviven a reinicios y despliegues.
+- Los archivos se crean automáticamente al arrancar cada servicio (carpeta `database/`).
+- Atención: siempre haz **backup** de esas dos carpetas (o migra luego a MariaDB/PostgreSQL de Alwaysdata usando `DATABASE_URL`, está en el roadmap del proyecto).
+
+---
+
 ## Buenas prácticas implementadas
 
 - Microservicios independientes: **no comparten base de datos**.
