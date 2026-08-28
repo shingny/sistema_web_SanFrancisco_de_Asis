@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard · Gestión de pedidos</title>
+  <link rel="stylesheet" href="static/css/dashboard.css" />
+</head>
+<body>
+  <header class="barra-superior">
+    <img class="logo" src="../frontend-cliente/static/img/logo.png" alt="Logo" />
+    <div class="titulo">
+      Panel de tienda
+      <span>San Francisco de Asís</span>
+    </div>
+    <div class="seleccion-tienda">
+      <label for="select-tienda">Tienda:</label>
+      <select id="select-tienda">
+        <option value="">Cargando tiendas...</option>
+      </select>
+      <button id="btn-cerrar" class="btn-cerrar">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <div id="toast-area" class="toast-area"></div>
+
+  <main class="panel-contenido">
+    <div id="mensaje-error" class="mensaje error"></div>
+
+    <!-- ======================= PEDIDOS ========================== -->
+    <h2 class="titulo-seccion">Pedidos <span class="etiqueta">Microservicio 1</span></h2>
+    <section id="kanban-pedidos" class="kanban"></section>
+
+    <!-- ===================== SEPARADO / RESERVAS ================= -->
+    <h2 class="titulo-seccion">Separado de tortas <span class="etiqueta">Microservicio 2</span></h2>
+    <section id="kanban-reservas" class="kanban"></section>
+  </main>
+
+  <script src="../frontend-cliente/static/js/config.js"></script>
+  <script src="static/js/dashboard.js"></script>
+</body>
+</html>

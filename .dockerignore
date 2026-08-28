@@ -1,0 +1,10 @@
+.git
+.gitignore
+.env
+*.db
+**/database/logs/*.log
+venv
+.venv
+__pycache__
+*.pyc
+README.md

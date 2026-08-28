@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>San Francisco de Asís · Elige tu tienda</title>
+  <link rel="stylesheet" href="static/css/styles.css" />
+</head>
+<body>
+  <header class="header">
+    <img class="logo" src="static/img/logo.png" alt="Logo San Francisco de Asís" />
+    <div class="marca">
+      <h1>San Francisco de Asís</h1>
+      <p>Panadería · Pastelería · Casa de tortas</p>
+    </div>
+  </header>
+
+  <main class="contenido">
+    <section class="hero">
+      <h2>¿En qué tienda nos visitas?</h2>
+      <p>Elige la sucursal más cercana y personaliza tu pedido.</p>
+      <div class="rayita"></div>
+    </section>
+
+    <div id="mensaje-error" class="mensaje error"></div>
+    <div id="cargando" class="cargando">Cargando tiendas disponibles...</div>
+
+    <section id="tiendas-grid" class="grid-tiendas"></section>
+  </main>
+
+  <footer class="pie">
+    <strong>San Francisco de Asís</strong> · Huancayo - Perú · 4 sucursales en el Centro y 1 en El Tambo
+  </footer>
+
+  <script src="static/js/config.js"></script>
+  <script src="static/js/tiendas.js"></script>
+</body>
+</html>

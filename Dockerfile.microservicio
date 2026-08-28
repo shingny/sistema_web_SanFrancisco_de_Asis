@@ -1,0 +1,21 @@
+# Imagen genérica para ambos microservicios Python/Flask.
+# Se selecciona el servicio con el argumento de build SERVICE.
+FROM python:3.11-slim
+
+ARG SERVICE=microservicio-pedidos
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY ${SERVICE}/ ./${SERVICE}/
+
+WORKDIR /app/${SERVICE}
+
+EXPOSE 5000
+
+CMD ["python", "app.py"]

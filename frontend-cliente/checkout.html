@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirmar pedido</title>
+  <link rel="stylesheet" href="static/css/styles.css" />
+</head>
+<body>
+  <header class="header">
+    <img class="logo" src="static/img/logo.png" alt="Logo San Francisco de Asís" />
+    <div class="marca">
+      <h1>San Francisco de Asís</h1>
+      <p>Solicitud de pedido</p>
+    </div>
+    <div id="tienda-actual" class="tienda-actual"></div>
+  </header>
+
+  <main class="contenido">
+    <section class="hero">
+      <h2>Revisa y confirma tu pedido</h2>
+      <p>Completa tus datos para que la tienda te contacte y tenga todo listo.</p>
+      <div class="rayita"></div>
+    </section>
+
+    <div id="mensaje-error" class="mensaje error"></div>
+
+    <!-- Vista de confirmación (oculta al inicio) -->
+    <section id="vista-confirmacion" class="confirmacion" style="display: none;">
+      <div class="circulo">OK</div>
+      <h2>¡Pedido registrado!</h2>
+      <p>Tu pedido fue enviado a la tienda seleccionada.</p>
+      <p>Número de pedido: <span id="nro-pedido" class="nro-pedido"></span></p>
+      <p>Te contactaremos al celular registrado para coordinar el recojo.</p>
+      <br />
+      <a href="index.html" class="btn btn-primario">Volver al inicio</a>
+    </section>
+
+    <!-- Vista de formulario -->
+    <form id="form-checkout" class="paso-checkout">
+      <div class="tarjeta-form">
+        <h3><span class="num">1</span> Tus datos</h3>
+        <div class="grupo">
+          <label for="nombre">Nombre y apellidos *</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Ej. María Rojas" required />
+        </div>
+        <div class="grupo">
+          <label for="celular">Celular *</label>
+          <input type="tel" id="celular" name="celular" placeholder="Ej. 987 654 321" required />
+        </div>
+        <div class="grupo">
+          <label for="email">Correo (opcional)</label>
+          <input type="email" id="email" name="email" placeholder="Ej. maria@correo.com" />
+        </div>
+      </div>
+
+      <div class="tarjeta-form">
+        <h3><span class="num">2</span> Entrega y pago</h3>
+        <div class="grupo">
+          <label for="fecha_entrega">Fecha de recojo</label>
+          <input type="date" id="fecha_entrega" name="fecha_entrega" />
+        </div>
+        <div class="grupo">
+          <label for="metodo_pago">Método de pago</label>
+          <select id="metodo_pago" name="metodo_pago">
+            <option value="efectivo">Efectivo en tienda</option>
+            <option value="yape">Yape</option>
+            <option value="plin">Plin</option>
+            <option value="tarjeta">Tarjeta</option>
+          </select>
+        </div>
+        <div class="grupo">
+          <label for="mensaje">Mensaje para la torta (opcional)</label>
+          <textarea id="mensaje" name="mensaje" rows="3" placeholder="Ej. Feliz cumpleaños, María"></textarea>
+        </div>
+      </div>
+
+      <div class="tarjeta-form">
+        <h3><span class="num">3</span> Resumen de tu pedido</h3>
+        <div id="resumen-items"></div>
+        <div class="total-final">
+          <span>Total a pagar</span>
+          <span id="resumen-total" class="monto">S/ 0.00</span>
+        </div>
+        <br />
+        <button type="submit" id="btn-confirmar" class="btn btn-primario btn-bloque">
+          Confirmar pedido
+        </button>
+      </div>
+    </form>
+  </main>
+
+  <footer class="pie">
+    <strong>San Francisco de Asís</strong> · Confirma tu pedido y lo preparamos para ti · Huancayo - Perú
+  </footer>
+
+  <script src="static/js/config.js"></script>
+  <script src="static/js/checkout.js"></script>
+</body>
+</html>

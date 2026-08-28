@@ -1,0 +1,57 @@
+# ============================================================
+# Docker Compose — San Francisco de Asís
+# Levanta el API Gateway y los 2 microservicios juntos.
+#   docker compose up --build
+# ============================================================
+
+services:
+  microservicio-pedidos:
+    build:
+      context: .
+      dockerfile: Dockerfile.microservicio
+      args:
+        SERVICE: microservicio-pedidos
+    command: python app.py
+    environment:
+      - PEDIDOS_HOST=0.0.0.0
+      - PEDIDOS_PORT=5001
+      - SECRET_KEY=cambio-en-produccion
+    volumes:
+      - ./microservicio-pedidos/database:/app/database
+    ports:
+      - "5001:5001"
+
+  microservicio-separado:
+    build:
+      context: .
+      dockerfile: Dockerfile.microservicio
+      args:
+        SERVICE: microservicio-separado
+    command: python app.py
+    environment:
+      - SEPARADO_HOST=0.0.0.0
+      - SEPARADO_PORT=5002
+      - SECRET_KEY=cambio-en-produccion
+    volumes:
+      - ./microservicio-separado/database:/app/database
+    ports:
+      - "5002:5002"
+
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.gateway
+    command: python app.py
+    environment:
+      - GATEWAY_HOST=0.0.0.0
+      - GATEWAY_PORT=5000
+      - PEDIDOS_URL=http://microservicio-pedidos:5001
+      - SEPARADO_URL=http://microservicio-separado:5002
+      - PANEL_USER=admin
+      - PANEL_PASSWORD=san-francisco-2024
+      - PANEL_TOKEN=sfa-token-demo-2024
+    ports:
+      - "5000:5000"
+    depends_on:
+      - microservicio-pedidos
+      - microservicio-separado

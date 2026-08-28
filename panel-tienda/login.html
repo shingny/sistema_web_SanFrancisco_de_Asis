@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de tienda · Iniciar sesión</title>
+  <link rel="stylesheet" href="static/css/dashboard.css" />
+</head>
+<body class="panel-login">
+  <div class="tarjeta-login">
+    <img class="logo" src="../frontend-cliente/static/img/logo.png" alt="Logo" />
+    <h1>Panel de tienda</h1>
+    <p class="subtitulo">San Francisco de Asís · Acceso del personal</p>
+
+    <div id="mensaje-error" class="mensaje error"></div>
+
+    <form id="form-login">
+      <div class="grupo">
+        <label for="usuario">Usuario</label>
+        <input type="text" id="usuario" name="usuario" placeholder="admin" required autocomplete="username" />
+      </div>
+      <div class="grupo">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password" />
+      </div>
+      <button type="submit" id="btn-ingresar" class="btn btn-primario btn-bloque">Ingresar</button>
+    </form>
+  </div>
+
+  <script src="../frontend-cliente/static/js/config.js"></script>
+  <script>
+    // Autenticación del panel vía API Gateway
+    document.getElementById("form-login").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const usuario = document.getElementById("usuario").value.trim();
+      const password = document.getElementById("password").value;
+      const btnIngresar = document.getElementById("btn-ingresar");
+      const mensajeError = document.getElementById("mensaje-error");
+
+      btnIngresar.disabled = true;
+      btnIngresar.textContent = "Verificando...";
+
+      try {
+        const respuesta = await fetch(`${API_BASE}/api/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ usuario, password }),
+        });
+        const data = await respuesta.json();
+
+        if (!respuesta.ok) {
+          throw new Error(data.error || "Credenciales inválidas");
+        }
+
+        sessionStorage.setItem("panel_token", data.token);
+        sessionStorage.setItem("panel_usuario", data.usuario);
+        window.location.href = "dashboard.html";
+      } catch (error) {
+        console.error("Error de login:", error);
+        mensajeError.textContent = error.message;
+        mensajeError.classList.add("visible");
+        btnIngresar.disabled = false;
+        btnIngresar.textContent = "Ingresar";
+      }
+    });
+  </script>
+</body>
+</html>
