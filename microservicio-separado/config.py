@@ -16,6 +16,21 @@ DATABASE_DIR.mkdir(parents=True, exist_ok=True)
 load_dotenv(BASE_DIR.parent / ".env")
 
 
+def _sqlalchemy_uri():
+    """Devuelve la URI de SQLAlchemy para PostgreSQL (psycopg v3) o SQLite local."""
+    url = os.getenv(
+        "DATABASE_URL",
+        os.getenv("DATABASE_URL_SEPARADO", "sqlite:///" + str(DATABASE_DIR / "reservas.db")),
+    )
+    # Si es una URL de PostgreSQL tipo postgresql://..., forzamos el dialecto
+    # psycopg (v3) que tiene wheels nativos para Python 3.14 en Render.
+    if url.startswith("postgresql://"):
+        return "postgresql+psycopg://" + url[len("postgresql://"):]
+    if url.startswith("postgres://"):
+        return "postgresql+psycopg://" + url[len("postgres://"):]
+    return url
+
+
 class Config:
     """Parámetros de configuración del microservicio de separado de tortas."""
 
@@ -25,10 +40,7 @@ class Config:
 
     # Base de datos: si existe DATABASE_URL (PostgreSQL en Alwaysdata/Render),
     # se usa esa; en caso contrario se usa SQLite local.
-    SQLALCHEMY_DATABASE_URI = os.getenv(
-        "DATABASE_URL",
-        os.getenv("DATABASE_URL_SEPARADO", "sqlite:///" + str(DATABASE_DIR / "reservas.db")),
-    )
+    SQLALCHEMY_DATABASE_URI = _sqlalchemy_uri()
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     SECRET_KEY = os.getenv("SECRET_KEY", "cambio-en-produccion")
