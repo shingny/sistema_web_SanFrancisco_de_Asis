@@ -15,13 +15,19 @@ PUBLICAS_PATCH = []
 
 
 def _es_ruta_publica(metodo, ruta):
-    """Indica si una ruta puede responderse sin token de autorización."""
+    """Indica si una ruta puede responderse sin token de autorización.
+
+    El parámetro `ruta` llega sin la barra inicial (p. ej. "pedidos/api/tiendas"),
+    mientras que los prefijos públicos se definen con "/". Normalizamos añadiendo
+    la barra inicial para que la comparación sea correcta.
+    """
+    normalizada = ruta if ruta.startswith("/") else "/" + ruta
     if metodo == "GET":
-        return any(ruta.startswith(prefijo) for prefijo in PUBLICAS_GET)
+        return any(normalizada.startswith(prefijo) for prefijo in PUBLICAS_GET)
     if metodo == "POST":
-        return any(ruta.startswith(prefijo) for prefijo in PUBLICAS_POST)
+        return any(normalizada.startswith(prefijo) for prefijo in PUBLICAS_POST)
     if metodo == "PATCH":
-        return any(ruta.startswith(prefijo) for prefijo in PUBLICAS_PATCH)
+        return any(normalizada.startswith(prefijo) for prefijo in PUBLICAS_PATCH)
     return False
 
 
