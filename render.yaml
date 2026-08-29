@@ -22,7 +22,7 @@ services:
   # ---------------- Microservicio 1: Pedidos ----------------
   - type: web
     name: sfa-pedidos
-    runtime: python
+    runtime: python3.11
     rootDir: microservicio-pedidos
     plan: free
     buildCommand: pip install -r ../requirements.txt
@@ -45,7 +45,7 @@ services:
   # ------------- Microservicio 2: Separado de tortas ----------
   - type: web
     name: sfa-separado
-    runtime: python
+    runtime: python3.11
     rootDir: microservicio-separado
     plan: free
     buildCommand: pip install -r ../requirements.txt
@@ -59,7 +59,7 @@ services:
   # -------------------- API Gateway --------------------------
   - type: web
     name: sfa-gateway
-    runtime: python
+    runtime: python3.11
     rootDir: gateway
     plan: free
     buildCommand: pip install -r ../requirements.txt
