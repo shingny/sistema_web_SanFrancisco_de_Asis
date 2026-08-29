@@ -26,7 +26,7 @@ services:
     rootDir: microservicio-pedidos
     plan: free
     buildCommand: pip install -r ../requirements.txt
-    startCommand: gunicorn app:app
+    startCommand: python render_db_check.py
     healthCheckPath: /
     envVars:
       # Base de datos PostgreSQL en Alwaysdata (cada microservicio la suya).
