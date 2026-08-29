@@ -8,4 +8,4 @@
 // (en un <script> previo) para anular este valor sin editar nada.
 
 const API_BASE =
-  (typeof window !== "undefined" && window.API_BASE) || "http://localhost:5000";
+  (typeof window !== "undefined" && window.API_BASE) || "https://sfa-gateway.onrender.com";
