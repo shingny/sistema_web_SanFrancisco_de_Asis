@@ -17,6 +17,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const URL_PEDIDOS = `${API_BASE}/pedidos/api`;
   const URL_RESERVAS = `${API_BASE}/reservas/api`;
 
+  // Muestra el usuario en la barra lateral
+  const usuarioSidebar = document.getElementById("panel-usuario");
+  if (usuarioSidebar) {
+    usuarioSidebar.textContent =
+      sessionStorage.getItem("panel_usuario") || "Personal";
+  }
+
+  // Actualiza las tarjetas de estadísticas del dashboard
+  const actualizarStats = () => {
+    const todos = document.querySelectorAll(".columna[data-estado]");
+    todos.forEach((columna) => {
+      const estado = columna.dataset.estado;
+      const valor = Number(
+        columna.querySelector(".contador")?.textContent || "0"
+      );
+      const celda = document.querySelector(
+        `[data-contador-stat="${CSS.escape(estado)}"]`
+      );
+      if (celda) celda.textContent = valor;
+    });
+  };
+
   const cabeceras = () => ({
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
@@ -194,6 +216,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const contador = cuerpoColumna.parentElement.querySelector(".contador");
       contador.textContent = Number(contador.textContent) + 1;
     });
+
+    actualizarStats();
   };
 
   const renderReservas = (reservas) => {

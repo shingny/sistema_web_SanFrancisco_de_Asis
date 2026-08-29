@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Confirmar pedido</title>
+  <title>Confirmar pedido · San Francisco de Asís</title>
   <link rel="stylesheet" href="static/css/styles.css" />
 </head>
 <body>
   <header class="header">
+    <button id="btn-volver" class="btn-volver" aria-label="Volver al catálogo">←</button>
     <img class="logo" src="static/img/logo.png" alt="Logo San Francisco de Asís" />
     <div class="marca">
-      <h1>San Francisco de Asís</h1>
-      <p>Solicitud de pedido</p>
+      <h1>Confirmar pedido</h1>
+      <p id="tienda-actual" class="tienda-actual"></p>
     </div>
-    <div id="tienda-actual" class="tienda-actual"></div>
   </header>
 
   <main class="contenido">
@@ -27,8 +27,8 @@
 
     <!-- Vista de confirmación (oculta al inicio) -->
     <section id="vista-confirmacion" class="confirmacion" style="display: none;">
-      <div class="circulo">OK</div>
-      <h2>¡Pedido registrado!</h2>
+      <div class="circulo">✓</div>
+      <h2>¡Pedido enviado!</h2>
       <p>Tu pedido fue enviado a la tienda seleccionada.</p>
       <p>Número de pedido: <span id="nro-pedido" class="nro-pedido"></span></p>
       <p>Te contactaremos al celular registrado para coordinar el recojo.</p>
@@ -38,6 +38,7 @@
 
     <!-- Vista de formulario -->
     <form id="form-checkout" class="paso-checkout">
+      <!-- Datos del cliente -->
       <div class="tarjeta-form">
         <h3><span class="num">1</span> Tus datos</h3>
         <div class="grupo">
@@ -45,7 +46,7 @@
           <input type="text" id="nombre" name="nombre" placeholder="Ej. María Rojas" required />
         </div>
         <div class="grupo">
-          <label for="celular">Celular *</label>
+          <label for="celular">Celular / WhatsApp *</label>
           <input type="tel" id="celular" name="celular" placeholder="Ej. 987 654 321" required />
         </div>
         <div class="grupo">
@@ -54,6 +55,7 @@
         </div>
       </div>
 
+      <!-- Entrega y pago -->
       <div class="tarjeta-form">
         <h3><span class="num">2</span> Entrega y pago</h3>
         <div class="grupo">
@@ -61,13 +63,13 @@
           <input type="date" id="fecha_entrega" name="fecha_entrega" />
         </div>
         <div class="grupo">
-          <label for="metodo_pago">Método de pago</label>
-          <select id="metodo_pago" name="metodo_pago">
-            <option value="efectivo">Efectivo en tienda</option>
-            <option value="yape">Yape</option>
-            <option value="plin">Plin</option>
-            <option value="tarjeta">Tarjeta</option>
-          </select>
+          <label>Método de pago</label>
+          <div class="chips-pago">
+            <button type="button" class="chip-pago" data-metodo="yape">Yape</button>
+            <button type="button" class="chip-pago activo" data-metodo="efectivo">Efectivo</button>
+            <button type="button" class="chip-pago" data-metodo="tarjeta">Tarjeta</button>
+          </div>
+          <input type="hidden" id="metodo_pago" value="efectivo" />
         </div>
         <div class="grupo">
           <label for="mensaje">Mensaje para la torta (opcional)</label>
@@ -75,15 +77,16 @@
         </div>
       </div>
 
-      <div class="tarjeta-form">
+      <!-- Resumen -->
+      <div class="tarjeta-form recibo">
         <h3><span class="num">3</span> Resumen de tu pedido</h3>
         <div id="resumen-items"></div>
+        <div class="divisor-recibo"></div>
         <div class="total-final">
           <span>Total a pagar</span>
           <span id="resumen-total" class="monto">S/ 0.00</span>
         </div>
-        <br />
-        <button type="submit" id="btn-confirmar" class="btn btn-primario btn-bloque">
+        <button type="submit" id="btn-confirmar" class="btn btn-degradado btn-bloque">
           Confirmar pedido
         </button>
       </div>
@@ -93,6 +96,11 @@
   <footer class="pie">
     <strong>San Francisco de Asís</strong> · Confirma tu pedido y lo preparamos para ti · Huancayo - Perú
   </footer>
+
+  <!-- Toast de confirmación -->
+  <div id="toast-confirmacion" class="toast-confirmacion" style="display: none;">
+    <span class="check-toast">✓</span> ¡Pedido enviado! Te contactaremos pronto.
+  </div>
 
   <script src="static/js/config.js"></script>
   <script src="static/js/checkout.js"></script>

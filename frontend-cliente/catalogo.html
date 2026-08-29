@@ -8,21 +8,15 @@
 </head>
 <body>
   <header class="header">
+    <button id="btn-volver" class="btn-volver" aria-label="Volver a seleccionar tienda">←</button>
     <img class="logo" src="static/img/logo.png" alt="Logo San Francisco de Asís" />
     <div class="marca">
-      <h1>San Francisco de Asís</h1>
-      <p>Catálogo y personalización</p>
+      <h1 id="marca-titulo">Catálogo</h1>
+      <p id="tienda-actual" class="tienda-actual"></p>
     </div>
-    <div id="tienda-actual" class="tienda-actual"></div>
   </header>
 
   <main class="contenido">
-    <section class="hero">
-      <h2>Arma tu pedido</h2>
-      <p>Elige tu torta o bocaditos, decide tamaño, sabor y agrégalos al carrito.</p>
-      <div class="rayita"></div>
-    </section>
-
     <div id="mensaje-error" class="mensaje error"></div>
     <div id="cargando" class="cargando">Cargando catálogo...</div>
 
@@ -33,10 +27,12 @@
 
     <section id="productos-grid" class="grid-productos"></section>
 
-    <div id="carrito-vacio" class="vacio">Aún no has agregado productos a tu pedido.</div>
+    <div id="carrito-vacio" class="vacio vacio-carrito">Aún no has agregado productos a tu pedido.</div>
+
+    <!-- Barra flotante de carrito -->
     <div id="barra-carrito" class="barra-carrito" style="display: none;">
       <div class="info">Tu pedido: <strong id="carrito-resumen">0 productos</strong></div>
-      <button id="btn-ir-checkout" class="btn-carrito">Ver pedido</button>
+      <button id="btn-ir-checkout" class="btn-carrito">Ver pedido ›</button>
     </div>
   </main>
 

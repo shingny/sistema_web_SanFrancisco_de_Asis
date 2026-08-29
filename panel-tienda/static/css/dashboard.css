@@ -1,15 +1,18 @@
 /* ============================================================
    San Francisco de Asís — Estilos del panel de tienda
    Mismo lenguaje visual de marca (Poppins + paleta).
+   Diseño: responsive (desktop con barra lateral, móvil adaptable).
    ============================================================ */
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
 
 :root {
   --marron: #6E2D0F;
+  --marron-oscuro: #3a1708;
   --naranja: #FF6900;
   --naranja-claro: #FFB04E;
   --turquesa: #17A2A0;
+  --rosa: #E8547A;
   --crema: #FFF8EF;
   --blanco: #ffffff;
   --gris: #7a7468;
@@ -23,10 +26,18 @@
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", system-ui, -apple-system, sans-serif;
   background: var(--crema);
   color: #3a2a1e;
   min-height: 100vh;
+}
+
+button {
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
 }
 
 /* ============================ LOGIN ========================= */
@@ -79,7 +90,9 @@ body {
   margin-bottom: 5px;
 }
 
-.grupo input {
+.grupo input,
+.grupo select,
+.grupo textarea {
   width: 100%;
   padding: 12px 14px;
   border: 2px solid #f0e5d5;
@@ -90,7 +103,9 @@ body {
   color: var(--marron);
 }
 
-.grupo input:focus {
+.grupo input:focus,
+.grupo select:focus,
+.grupo textarea:focus {
   outline: none;
   border-color: var(--naranja);
 }
@@ -154,91 +169,214 @@ body {
 }
 
 /* =========================== DASHBOARD ======================= */
-.barra-superior {
-  background: var(--marron);
-  color: var(--blanco);
-  padding: 12px 18px;
+.layout-dashboard {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  min-height: 100vh;
+}
+
+/* ----------- Barra lateral ------------ */
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, var(--marron-oscuro), var(--marron));
+  color: var(--blanco);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 16px;
   position: sticky;
   top: 0;
-  z-index: 30;
-  box-shadow: var(--sombra);
+  height: 100vh;
 }
 
-.barra-superior .logo {
-  width: 38px;
-  height: 38px;
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  margin-bottom: 18px;
 }
 
-.barra-superior .titulo {
-  font-size: 1rem;
-  font-weight: 700;
+.sidebar-logo .logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--blanco);
+  object-fit: contain;
+  padding: 3px;
 }
 
-.barra-superior .titulo span {
+.sidebar-logo strong {
   display: block;
-  font-size: 0.7rem;
-  font-weight: 500;
+  font-size: 0.95rem;
+  line-height: 1.1;
+}
+
+.sidebar-logo span {
+  font-size: 0.72rem;
   color: var(--naranja-claro);
 }
 
-.seleccion-tienda {
-  margin-left: auto;
+.menu {
+  flex: 1;
   display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.seleccion-tienda select {
-  padding: 9px 12px;
-  border-radius: 10px;
+.menu-titulo {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 6px 6px 8px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.menu-item.activo {
+  background: var(--naranja);
+  color: var(--blanco);
+}
+
+.tienda-activa {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.tienda-activa span {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--naranja-claro);
+  margin-bottom: 8px;
+}
+
+.select-tienda {
+  width: 100%;
+  padding: 10px 12px;
   border: none;
+  border-radius: 10px;
   font-family: inherit;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   background: var(--blanco);
   color: var(--marron);
-  min-width: 220px;
+}
+
+.sidebar-user {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: 12px;
+}
+
+.usuario-nombre {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 8px;
 }
 
 .btn-cerrar {
-  background: rgba(255, 255, 255, 0.14);
+  width: 100%;
+  background: rgba(255, 255, 255, 0.12);
   color: var(--blanco);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 10px;
-  padding: 8px 14px;
+  padding: 9px 14px;
   font-family: inherit;
   font-size: 0.8rem;
   cursor: pointer;
+  transition: background 0.15s ease;
 }
 
-/* ----------- Contenedor del panel ------------ */
+.btn-cerrar:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ----------- Contenido del panel ------------ */
 .panel-contenido {
+  flex: 1;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 18px 16px 40px;
+  padding: 20px 20px 48px;
+  min-width: 0;
+}
+
+/* Tarjetas de estadísticas */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.stat {
+  background: var(--blanco);
+  border-radius: 16px;
+  box-shadow: var(--sombra);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 4px solid var(--naranja-claro);
+}
+
+.stat.stat-nuevos {
+  border-top-color: var(--naranja);
+  background: linear-gradient(135deg, #fff3e6, #ffffff);
+}
+
+.stat .stat-num {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--marron);
+  line-height: 1;
+}
+
+.stat .stat-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gris);
 }
 
 .titulo-seccion {
-  font-size: 1.15rem;
-  color: var(--marron);
-  margin: 24px 0 12px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  margin: 26px 0 14px;
+}
+
+.titulo-seccion h2 {
+  font-size: 1.15rem;
+  color: var(--marron);
 }
 
 .titulo-seccion .etiqueta {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   background: var(--turquesa);
   color: var(--blanco);
-  padding: 4px 10px;
+  padding: 4px 11px;
   border-radius: 999px;
 }
 
@@ -251,34 +389,30 @@ body {
 
 .columna {
   background: var(--blanco);
-  border-radius: 14px;
+  border-radius: 16px;
   box-shadow: var(--sombra);
   overflow: hidden;
 }
 
 .columna .encabezado {
-  padding: 12px 14px;
+  padding: 13px 16px;
   color: var(--blanco);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 700;
 }
 
 .columna .encabezado .contador {
   background: rgba(255, 255, 255, 0.25);
   border-radius: 999px;
-  padding: 2px 10px;
+  padding: 2px 11px;
   font-size: 0.78rem;
 }
 
-.columna.pedido .encabezado:nth-child(1) .encabezado {
-  background: var(--naranja);
-}
-
 .columna .cuerpo {
-  padding: 10px;
+  padding: 12px;
   min-height: 90px;
   display: flex;
   flex-direction: column;
@@ -313,8 +447,9 @@ body {
   background: var(--crema);
   border-radius: 12px;
   padding: 12px;
-  border-left: 5px solid var(--naranja);
+  border-left: 5px solid var(--naranja-claro);
   font-size: 0.82rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .tarjeta-orden .nro {
@@ -408,7 +543,7 @@ body {
 /* ----------- Notificaciones (toast) ------------ */
 .toast-area {
   position: fixed;
-  top: 76px;
+  top: 16px;
   right: 16px;
   z-index: 50;
   display: flex;
@@ -418,18 +553,18 @@ body {
 }
 
 .toast {
-  background: var(--marron);
-  color: var(--blanco);
+  background: var(--blanco);
+  color: var(--marron);
   border-radius: 12px;
   padding: 14px 16px;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
   border-left: 6px solid var(--naranja);
   font-size: 0.82rem;
   animation: entrarToast 0.3s ease;
 }
 
 .toast strong {
-  color: var(--naranja-claro);
+  color: var(--naranja);
 }
 
 @keyframes entrarToast {
@@ -512,31 +647,96 @@ body {
   display: block;
 }
 
-.tarjeta-imagen.accion {
-  gap: 12px;
-}
-
 .tarjeta-imagen.accion .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* ----------- Responsive ------------ */
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+/* Tablets >= 800px: kanban en 2-4 columnas */
 @media (min-width: 800px) {
   .kanban {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .kanban-reservas {
+  .stats {
     grid-template-columns: repeat(4, 1fr);
   }
 
   .panel-imagenes {
     grid-template-columns: 1fr 1fr;
   }
+}
 
-  .panel-imagenes .tarjeta-imagen.accion {
-    grid-column: 1 / -1;
-    max-width: 480px;
+/* Desktop >= 1120px */
+@media (min-width: 1120px) {
+  .kanban {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Móvil: la barra lateral pasa a ser superior (compacta) */
+@media (max-width: 700px) {
+  .layout-dashboard {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: sticky;
+    top: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    flex-wrap: wrap;
+    z-index: 30;
+  }
+
+  .sidebar-logo {
+    padding-bottom: 0;
+    border-bottom: none;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  .sidebar-logo strong {
+    font-size: 0.85rem;
+  }
+
+  .menu {
+    display: none; /* se oculta en móvil para simplificar */
+  }
+
+  .tienda-activa {
+    margin-bottom: 0;
+    margin-left: auto;
+    flex: 1;
+    min-width: 160px;
+  }
+
+  .tienda-activa span {
+    display: none;
+  }
+
+  .sidebar-user {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .usuario-nombre {
+    display: none;
+  }
+
+  .btn-cerrar {
+    width: auto;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

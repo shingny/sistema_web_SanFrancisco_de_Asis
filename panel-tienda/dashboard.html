@@ -6,58 +6,106 @@
   <title>Dashboard · Gestión de pedidos</title>
   <link rel="stylesheet" href="static/css/dashboard.css" />
 </head>
-<body>
-  <header class="barra-superior">
-    <img class="logo" src="static/img/logo.png" alt="Logo" />
-    <div class="titulo">
-      Panel de tienda
-      <span>San Francisco de Asís</span>
-    </div>
-    <div class="seleccion-tienda">
-      <label for="select-tienda">Tienda:</label>
-      <select id="select-tienda">
-        <option value="">Cargando tiendas...</option>
-      </select>
-      <button id="btn-cerrar" class="btn-cerrar">Cerrar sesión</button>
-    </div>
-  </header>
-
+<body class="panel-dashboard">
   <div id="toast-area" class="toast-area"></div>
 
-  <main class="panel-contenido">
-    <div id="mensaje-error" class="mensaje error"></div>
+  <div class="layout-dashboard">
+    <!-- ===================== BARRA LATERAL ===================== -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img class="logo" src="static/img/logo.png" alt="Logo" />
+        <div>
+          <strong>San Francisco</strong>
+          <span>de Asís</span>
+        </div>
+      </div>
 
-    <!-- ======================= PEDIDOS ========================== -->
-    <h2 class="titulo-seccion">Pedidos <span class="etiqueta">Microservicio 1</span></h2>
-    <section id="kanban-pedidos" class="kanban"></section>
+      <nav class="menu">
+        <span class="menu-titulo">ADMINISTRACIÓN</span>
+        <a href="dashboard.html" class="menu-item activo">📋 Pedidos</a>
+        <a href="#imagenes" class="menu-item">🖼️ Catálogo</a>
+        <a href="dashboard.html" class="menu-item">🎂 Separado de tortas</a>
+        <a href="dashboard.html" class="menu-item">📊 Reportes</a>
+      </nav>
 
-    <!-- ===================== SEPARADO / RESERVAS ================= -->
-    <h2 class="titulo-seccion">Separado de tortas <span class="etiqueta">Microservicio 2</span></h2>
-    <section id="kanban-reservas" class="kanban"></section>
-
-    <!-- ================= GESTIÓN DE IMÁGENES ==================== -->
-    <h2 class="titulo-seccion">Catálogo · Imágenes <span class="etiqueta">Cloudinary</span></h2>
-    <section class="panel-imagenes">
-      <div class="tarjeta-imagen">
-        <label for="select-producto">Producto</label>
-        <select id="select-producto">
-          <option value="">Cargando productos...</option>
+      <div class="tienda-activa">
+        <span>Tienda activa</span>
+        <select id="select-tienda" class="select-tienda">
+          <option value="">Cargando tiendas...</option>
         </select>
       </div>
 
-      <div class="tarjeta-imagen preview">
-        <div class="preview-titulo">Imagen actual</div>
-        <div id="preview-imagen" class="preview-vacio">Selecciona un producto para ver su imagen.</div>
+      <div class="sidebar-user">
+        <span id="panel-usuario" class="usuario-nombre">Personal</span>
+        <button id="btn-cerrar" class="btn-cerrar">Cerrar sesión</button>
       </div>
+    </aside>
 
-      <div class="tarjeta-imagen accion">
-        <label for="input-imagen">Nueva imagen (JPG / PNG / WebP)</label>
-        <input type="file" id="input-imagen" accept="image/png,image/jpeg,image/webp" />
-        <button id="btn-subir" class="btn btn-primario" disabled>Subir imagen a Cloudinary</button>
-        <button id="btn-quitar" class="btn btn-secundario" disabled>Quitar imagen</button>
+    <!-- ===================== CONTENIDO ========================= -->
+    <main class="panel-contenido">
+      <div id="mensaje-error" class="mensaje error"></div>
+
+      <!-- Tarjetas de estadísticas -->
+      <section class="stats">
+        <div class="stat stat-nuevos" data-stat="nuevo">
+          <span class="stat-num" data-contador-stat="nuevo">0</span>
+          <span class="stat-label">Pedidos nuevos</span>
+        </div>
+        <div class="stat" data-stat="en_preparacion">
+          <span class="stat-num" data-contador-stat="en_preparacion">0</span>
+          <span class="stat-label">En preparación</span>
+        </div>
+        <div class="stat" data-stat="listo">
+          <span class="stat-num" data-contador-stat="listo">0</span>
+          <span class="stat-label">Listos</span>
+        </div>
+        <div class="stat" data-stat="entregado">
+          <span class="stat-num" data-contador-stat="entregado">0</span>
+          <span class="stat-label">Entregados</span>
+        </div>
+      </section>
+
+      <!-- Kanban de pedidos -->
+      <div class="titulo-seccion">
+        <h2>Pedidos</h2>
+        <span class="etiqueta">Microservicio 1</span>
       </div>
-    </section>
-  </main>
+      <section id="kanban-pedidos" class="kanban"></section>
+
+      <!-- Kanban de reservas / separado -->
+      <div class="titulo-seccion">
+        <h2>Separado de tortas</h2>
+        <span class="etiqueta">Microservicio 2</span>
+      </div>
+      <section id="kanban-reservas" class="kanban kanban-reservas"></section>
+
+      <!-- Gestión de imágenes Cloudinary -->
+      <div id="imagenes" class="titulo-seccion">
+        <h2>Catálogo · Imágenes</h2>
+        <span class="etiqueta">Cloudinary</span>
+      </div>
+      <section class="panel-imagenes">
+        <div class="tarjeta-imagen">
+          <label for="select-producto">Producto</label>
+          <select id="select-producto">
+            <option value="">Cargando productos...</option>
+          </select>
+        </div>
+
+        <div class="tarjeta-imagen preview">
+          <div class="preview-titulo">Imagen actual</div>
+          <div id="preview-imagen" class="preview-vacio">Selecciona un producto para ver su imagen.</div>
+        </div>
+
+        <div class="tarjeta-imagen accion">
+          <label for="input-imagen">Nueva imagen (JPG / PNG / WebP)</label>
+          <input type="file" id="input-imagen" accept="image/png,image/jpeg,image/webp" />
+          <button id="btn-subir" class="btn btn-primario" disabled>Subir imagen a Cloudinary</button>
+          <button id="btn-quitar" class="btn btn-secundario" disabled>Quitar imagen</button>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <script src="static/js/config.js"></script>
   <script src="static/js/dashboard.js"></script>

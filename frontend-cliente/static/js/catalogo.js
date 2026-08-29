@@ -12,8 +12,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const tiendaActual = document.getElementById("tienda-actual");
+  const btnVolver = document.getElementById("btn-volver");
   tiendaActual.textContent = tiendaNombre || `Tienda #${tiendaId}`;
   tiendaActual.classList.add("visible");
+  document.getElementById("marca-titulo").textContent =
+    tiendaNombre || `Tienda #${tiendaId}`;
+
+  if (btnVolver) {
+    btnVolver.addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
+  }
 
   const grid = document.getElementById("productos-grid");
   const mensajeError = document.getElementById("mensaje-error");
@@ -71,45 +80,51 @@ document.addEventListener("DOMContentLoaded", () => {
       const imagen = producto.imagen_url || "";
 
       const portada = imagen
-        ? `<div class="portada con-imagen"><img src="${imagen}" alt="${producto.nombre}" loading="lazy" /><span>${textoClase}</span></div>`
-        : `<div class="portada"><span>${textoClase}</span></div>`;
+        ? `<div class="portada con-imagen"><img src="${imagen}" alt="${producto.nombre}" loading="lazy" /><span class="chip-tipo">${textoClase}</span></div>`
+        : `<div class="portada sin-imagen"><span class="chip-tipo">${textoClase}</span><span class="icono-bocado">${producto.tipo === "torta" ? "🎂" : "🍪"}</span></div>`;
+
+      const chipsTamano = (producto.tamanos || [])
+        .map((t, i) => `<button type="button" class="chip sel-tamano ${i === 0 ? "activo" : ""}" data-valor="${t}">${t}</button>`)
+        .join("");
+      const chipsSabor = (producto.sabores || [])
+        .map((s, i) => `<button type="button" class="chip sel-sabor ${i === 0 ? "activo" : ""}" data-valor="${s}">${s}</button>`)
+        .join("");
 
       tarjeta.innerHTML = `
         ${portada}
         <div class="cuerpo">
-          <div>
-            <div class="nombre">${producto.nombre}</div>
-            <div class="descripcion">${producto.descripcion}</div>
+          <div class="nombre">${producto.nombre}</div>
+          <div class="descripcion">${producto.descripcion}</div>
+          <div class="fila-precio-agregar">
+            <div class="precio">S/ ${Number(producto.precio_base).toFixed(2)}</div>
+            <button class="agregar" data-id="${producto.id}">+ Agregar</button>
           </div>
-          <div class="precio">S/ ${Number(producto.precio_base).toFixed(2)}</div>
-          <div class="opciones">
-            <select class="sel-tamano" title="Tamaño">
-              ${producto.tamanos
-                .map((tamano) => `<option value="${tamano}">${tamano}</option>`)
-                .join("")}
-            </select>
-            <select class="sel-sabor" title="Sabor">
-              ${producto.sabores
-                .map((sabor) => `<option value="${sabor}">${sabor}</option>`)
-                .join("")}
-            </select>
-          </div>
-          <div class="grupo">
-            <label class="fila-cantidad">Cantidad</label>
-            <input type="number" class="inp-cantidad" value="1" min="1" max="50" />
-          </div>
-          <button class="agregar" data-id="${producto.id}">Agregar al pedido</button>
+          ${chipsTamano ? `<div class="campo-chip"><label>Tamaño</label><div class="chips">${chipsTamano}</div></div>` : ""}
+          ${chipsSabor ? `<div class="campo-chip"><label>Sabor</label><div class="chips">${chipsSabor}</div></div>` : ""}
         </div>
       `;
 
+      // Selección de chips de tamaño / sabor
+      tarjeta.querySelectorAll(".sel-tamano").forEach((c) =>
+        c.addEventListener("click", () => {
+          tarjeta.querySelectorAll(".sel-tamano").forEach((x) => x.classList.remove("activo"));
+          c.classList.add("activo");
+        })
+      );
+      tarjeta.querySelectorAll(".sel-sabor").forEach((c) =>
+        c.addEventListener("click", () => {
+          tarjeta.querySelectorAll(".sel-sabor").forEach((x) => x.classList.remove("activo"));
+          c.classList.add("activo");
+        })
+      );
+
       const botonAgregar = tarjeta.querySelector(".agregar");
       botonAgregar.addEventListener("click", () => {
-        const tamano = tarjeta.querySelector(".sel-tamano").value;
-        const sabor = tarjeta.querySelector(".sel-sabor").value;
-        const cantidad = Math.max(
-          1,
-          parseInt(tarjeta.querySelector(".inp-cantidad").value, 10) || 1
-        );
+        const selTamano = tarjeta.querySelector(".sel-tamano.activo");
+        const selSabor = tarjeta.querySelector(".sel-sabor.activo");
+        const tamano = selTamano ? selTamano.dataset.valor : "";
+        const sabor = selSabor ? selSabor.dataset.valor : "";
+        const cantidad = 1;
 
         const carrito = leerCarrito();
         const existente = carrito.find(

@@ -14,6 +14,23 @@ document.addEventListener("DOMContentLoaded", () => {
     tiendaNombre || `Tienda #${tiendaId}`;
   document.getElementById("tienda-actual").classList.add("visible");
 
+  const btnVolver = document.getElementById("btn-volver");
+  if (btnVolver) {
+    btnVolver.addEventListener("click", () => {
+      window.location.href = "catalogo.html";
+    });
+  }
+
+  // ---- Chips de método de pago --------------------------------
+  const chipsPago = document.querySelectorAll(".chip-pago");
+  chipsPago.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      chipsPago.forEach((c) => c.classList.remove("activo"));
+      chip.classList.add("activo");
+      document.getElementById("metodo_pago").value = chip.dataset.metodo;
+    });
+  });
+
   const leerCarrito = () => {
     try {
       return JSON.parse(sessionStorage.getItem("carrito") || "[]");
@@ -122,6 +139,19 @@ document.addEventListener("DOMContentLoaded", () => {
         formulario.style.display = "none";
         document.getElementById("vista-confirmacion").style.display = "block";
         window.scrollTo({ top: 0, behavior: "smooth" });
+
+        // Muestra el toast de confirmación
+        const toast = document.getElementById("toast-confirmacion");
+        if (toast) {
+          toast.style.display = "flex";
+          setTimeout(() => {
+            toast.classList.add("oculto");
+            setTimeout(() => {
+              toast.style.display = "none";
+              toast.classList.remove("oculto");
+            }, 400);
+          }, 3000);
+        }
       })
       .catch((error) => {
         console.error("Error al confirmar pedido:", error);

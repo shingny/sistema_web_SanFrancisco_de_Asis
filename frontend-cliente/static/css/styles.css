@@ -1,27 +1,30 @@
 /* ============================================================
    San Francisco de Asís — Estilos del frontend de cliente
    Paleta de marca:
-     marrón      #6E2D0F
-     naranja     #FF6900
+     marrón        #6E2D0F
+     naranja       #FF6900
      naranja claro #FFB04E
-     turquesa    #17A2A0
-     crema       #FFF8EF
+     turquesa      #17A2A0
+     rosa          #E8547A
+     crema         #FFF8EF
    Tipografía: Poppins (Google Fonts)
-   Diseño: mobile-first, responsivo.
+   Diseño: mobile-first, totalmente responsivo.
    ============================================================ */
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
 
 :root {
   --marron: #6E2D0F;
+  --marron-oscuro: #3a1708;
   --naranja: #FF6900;
   --naranja-claro: #FFB04E;
   --turquesa: #17A2A0;
+  --rosa: #E8547A;
   --crema: #FFF8EF;
   --blanco: #ffffff;
   --gris: #7a7468;
   --sombra: 0 6px 20px rgba(110, 45, 15, 0.12);
-  --radio: 16px;
+  --radio: 18px;
 }
 
 * {
@@ -30,8 +33,12 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", system-ui, -apple-system, sans-serif;
   background: var(--crema);
   color: #3a2a1e;
   min-height: 100vh;
@@ -44,88 +51,118 @@ a {
   color: inherit;
 }
 
-/* ----------------------- Header ----------------------------- */
+button {
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* ----------------------- Header (banner) -------------------- */
 .header {
-  background: var(--marron);
+  background: linear-gradient(160deg, var(--marron-oscuro) 0%, var(--marron) 60%, #a3481a 120%);
   color: var(--blanco);
-  padding: 14px 20px;
+  padding: 16px 18px;
   display: flex;
   align-items: center;
   gap: 12px;
   position: sticky;
   top: 0;
-  z-index: 20;
-  box-shadow: var(--sombra);
+  z-index: 30;
+  box-shadow: 0 6px 18px rgba(58, 23, 8, 0.35);
 }
 
 .header .logo {
-  width: 42px;
-  height: 42px;
+  width: 46px;
+  height: 46px;
   flex-shrink: 0;
+  border-radius: 12px;
+  background: var(--blanco);
+  object-fit: contain;
+  padding: 3px;
 }
 
 .header .marca h1 {
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-size: 1.15rem;
+  font-weight: 800;
   line-height: 1.1;
+  letter-spacing: 0.01em;
 }
 
 .header .marca p {
   font-size: 0.72rem;
   color: var(--naranja-claro);
   font-weight: 500;
+  margin-top: 2px;
 }
 
 .header .tienda-actual {
-  margin-left: auto;
   font-size: 0.78rem;
+  color: var(--naranja-claro);
+  font-weight: 600;
+  max-width: 60%;
+}
+
+.btn-volver {
   background: rgba(255, 255, 255, 0.14);
-  padding: 6px 12px;
-  border-radius: 999px;
-  display: none;
-  text-align: right;
-  max-width: 55%;
+  color: var(--blanco);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.3rem;
+  line-height: 1;
+  flex-shrink: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
 }
 
-.header .tienda-actual.visible {
-  display: block;
+.btn-volver:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
-/* ----------------------- Secciones -------------------------- */
+/* ----------------------- Contenido --------------------------- */
 .contenido {
   flex: 1;
   width: 100%;
-  max-width: 1100px;
+  max-width: 1080px;
   margin: 0 auto;
-  padding: 22px 16px 40px;
+  padding: 20px 16px 44px;
 }
 
 .hero {
   text-align: center;
-  padding: 18px 0 26px;
+  padding: 10px 0 24px;
 }
 
 .hero h2 {
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   color: var(--marron);
   font-weight: 800;
   margin-bottom: 6px;
+  line-height: 1.2;
 }
 
 .hero p {
   color: var(--gris);
   font-size: 0.95rem;
+  max-width: 520px;
+  margin: 0 auto;
 }
 
 .hero .rayita {
-  width: 60px;
+  width: 64px;
   height: 5px;
-  background: var(--naranja);
+  background: linear-gradient(90deg, var(--naranja), var(--naranja-claro));
   border-radius: 999px;
-  margin: 12px auto 0;
+  margin: 14px auto 0;
 }
 
-/* ----------------------- Botones ---------------------------- */
+/* ----------------------- Botones ----------------------------- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -133,10 +170,10 @@ a {
   gap: 8px;
   border: none;
   border-radius: 999px;
-  padding: 12px 22px;
+  padding: 13px 24px;
   font-family: inherit;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
 }
@@ -145,110 +182,177 @@ a {
   transform: scale(0.97);
 }
 
-.btn-primario {
-  background: var(--naranja);
-  color: var(--blanco);
-  box-shadow: 0 6px 16px rgba(255, 105, 0, 0.35);
-}
-
-.btn-primario:hover {
-  box-shadow: 0 8px 20px rgba(255, 105, 0, 0.45);
-}
-
-.btn-turquesa {
-  background: var(--turquesa);
-  color: var(--blanco);
-}
-
-.btn-secundario {
-  background: var(--blanco);
-  color: var(--marron);
-  border: 2px solid var(--naranja-claro);
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .btn-bloque {
   width: 100%;
 }
 
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.btn-primario {
+  background: var(--naranja);
+  color: var(--blanco);
+  box-shadow: 0 6px 16px rgba(255, 105, 0, 0.35);
 }
 
-/* ----------------------- Tarjetas tienda -------------------- */
-.grid-tiendas {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
+.btn-degradado {
+  background: linear-gradient(120deg, var(--naranja), #ff8a3d);
+  color: var(--blanco);
+  box-shadow: 0 8px 20px rgba(255, 105, 0, 0.4);
+}
+
+/* ----------------------- Lista de tiendas -------------------- */
+.lista-tiendas {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 640px;
+  margin: 0 auto;
 }
 
 .tarjeta-tienda {
   background: var(--blanco);
   border-radius: var(--radio);
-  padding: 18px;
+  padding: 16px;
   box-shadow: var(--sombra);
-  border-left: 6px solid var(--naranja);
+  border: 2px solid transparent;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  align-items: center;
+  gap: 14px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
 }
 
 .tarjeta-tienda:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 26px rgba(110, 45, 15, 0.18);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(110, 45, 15, 0.18);
 }
 
-.tarjeta-tienda .nombre {
-  font-size: 1.05rem;
+/* Selección resaltada en naranja claro */
+.tarjeta-tienda.seleccionada {
+  border-color: var(--naranja);
+  background: linear-gradient(135deg, #fff3e6, #ffdfc0);
+  box-shadow: 0 8px 26px rgba(255, 105, 0, 0.28);
+  transform: scale(1.01);
+}
+
+.icono-tienda {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: var(--crema);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  border: 1px solid #f0e5d5;
+}
+
+.info-tienda {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.info-tienda .nombre {
+  font-size: 1.02rem;
   font-weight: 700;
   color: var(--marron);
+  line-height: 1.2;
 }
 
-.tarjeta-tienda .zona {
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--turquesa);
-}
-
-.tarjeta-tienda .direccion,
-.tarjeta-tienda .horario {
+.info-tienda .direccion {
   font-size: 0.82rem;
   color: var(--gris);
 }
 
+.info-tienda .zona {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--turquesa);
+}
+
+.lado-estado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.estado-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+
+.estado-tag.abierto {
+  background: #e6f7f4;
+  color: var(--turquesa);
+  border: 1px solid #bfe9e3;
+}
+
+.estado-tag.cerrado {
+  background: #f5eef2;
+  color: var(--rosa);
+  border: 1px solid #efd3dd;
+}
+
 .estado-dot {
   display: inline-block;
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--naranja);
-  margin-right: 5px;
 }
 
 .estado-dot.abierto {
   background: var(--turquesa);
 }
 
-/* ----------------------- Catálogo --------------------------- */
+.flecha {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--naranja);
+  line-height: 1;
+}
+
+.nota-seleccion {
+  text-align: center;
+  color: var(--gris);
+  font-size: 0.85rem;
+  margin-top: 22px;
+}
+
+/* ----------------------- Tabs (chips) ------------------------ */
 .tabs {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .tab {
   flex: 1;
-  padding: 11px 8px;
+  min-width: 120px;
+  padding: 12px 14px;
   background: var(--blanco);
-  border: 2px solid var(--naranja-claro);
+  border: 2px solid #f0e5d5;
   border-radius: 999px;
   font-family: inherit;
   font-weight: 600;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   color: var(--marron);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -258,20 +362,10 @@ a {
   background: var(--naranja);
   border-color: var(--naranja);
   color: var(--blanco);
+  box-shadow: 0 4px 12px rgba(255, 105, 0, 0.3);
 }
 
-.filtro-tiendas {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 2px solid var(--naranja-claro);
-  background: var(--blanco);
-  font-family: inherit;
-  font-size: 0.92rem;
-  color: var(--marron);
-  margin-bottom: 18px;
-}
-
+/* ----------------------- Catálogo (grid) --------------------- */
 .grid-productos {
   display: grid;
   grid-template-columns: 1fr;
@@ -285,19 +379,21 @@ a {
   box-shadow: var(--sombra);
   display: flex;
   flex-direction: column;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tarjeta-producto:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(110, 45, 15, 0.16);
 }
 
 .tarjeta-producto .portada {
-  height: 96px;
+  height: 150px;
   background: linear-gradient(135deg, var(--naranja-claro), var(--naranja));
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.tarjeta-producto .portada.con-imagen {
   position: relative;
-  padding: 0;
 }
 
 .tarjeta-producto .portada.con-imagen img {
@@ -307,49 +403,84 @@ a {
   display: block;
 }
 
-.tarjeta-producto .portada.con-imagen span {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-}
-
 .tarjeta-producto.torta .portada {
   background: linear-gradient(135deg, var(--marron), #a3481a);
 }
 
-.tarjeta-producto .portada span {
+.tarjeta-producto .portada .chip-tipo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
   color: var(--blanco);
   font-weight: 700;
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
-  padding: 4px 14px;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  padding: 4px 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(58, 23, 8, 0.55);
   backdrop-filter: blur(2px);
 }
 
+.tarjeta-producto .portada.sin-imagen .icono-bocado {
+  font-size: 3rem;
+  color: var(--blanco);
+  opacity: 0.9;
+}
+
 .tarjeta-producto .cuerpo {
-  padding: 16px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .tarjeta-producto .cuerpo .nombre {
   font-weight: 700;
   color: var(--marron);
   font-size: 1rem;
+  line-height: 1.2;
 }
 
 .tarjeta-producto .cuerpo .descripcion {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--gris);
+  line-height: 1.4;
+}
+
+.tarjeta-producto .fila-precio-agregar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 2px;
 }
 
 .tarjeta-producto .cuerpo .precio {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 800;
   color: var(--naranja);
+  white-space: nowrap;
+}
+
+.tarjeta-producto .agregar {
+  background: var(--naranja);
+  color: var(--blanco);
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.tarjeta-producto .agregar:hover {
+  opacity: 0.9;
+}
+
+.tarjeta-producto .agregar:active {
+  transform: scale(0.95);
 }
 
 .tarjeta-producto .opciones {
@@ -361,47 +492,67 @@ a {
 .tarjeta-producto select,
 .tarjeta-producto input[type="number"] {
   width: 100%;
-  padding: 9px 8px;
+  padding: 10px 8px;
   border: 2px solid #f0e5d5;
   border-radius: 10px;
   font-family: inherit;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   background: var(--crema);
   color: var(--marron);
 }
 
-.tarjeta-producto .agregar {
-  background: var(--turquesa);
-  color: var(--blanco);
-  border: none;
-  border-radius: 10px;
-  padding: 11px;
+/* Personalización con chips */
+.campo-chip label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--marron);
+  margin-bottom: 6px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 2px solid #f0e5d5;
+  background: var(--blanco);
+  color: var(--marron);
   font-family: inherit;
-  font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.15s ease;
+  transition: all 0.15s ease;
 }
 
-.tarjeta-producto .agregar:hover {
-  opacity: 0.88;
+.chip.activo {
+  background: var(--turquesa);
+  border-color: var(--turquesa);
+  color: var(--blanco);
 }
 
-/* ----------------------- Barra de carrito ------------------- */
+/* ----------------------- Barra de carrito -------------------- */
 .barra-carrito {
-  position: sticky;
+  position: fixed;
   bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 24px);
+  max-width: 560px;
   background: var(--marron);
   color: var(--blanco);
   border-radius: 999px;
-  padding: 14px 20px;
+  padding: 12px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
   gap: 10px;
-  max-width: 560px;
-  margin: 18px auto 0;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
+  z-index: 40;
 }
 
 .barra-carrito .info {
@@ -425,9 +576,10 @@ a {
   cursor: pointer;
 }
 
-/* ----------------------- Checkout --------------------------- */
+/* ----------------------- Checkout ---------------------------- */
 .paso-checkout {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 18px;
 }
 
@@ -441,35 +593,35 @@ a {
 .tarjeta-form h3 {
   font-size: 1rem;
   color: var(--marron);
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
 .tarjeta-form h3 .num {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: var(--naranja);
   color: var(--blanco);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 700;
 }
 
 .grupo {
-  margin-bottom: 14px;
+  margin-bottom: 15px;
 }
 
 .grupo label {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: var(--marron);
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 
 .grupo input,
@@ -493,18 +645,46 @@ a {
   border-color: var(--naranja);
 }
 
-.fila-2 {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
+/* Chips de método de pago */
+.chips-pago {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-/* ----------------------- Resumen pedido --------------------- */
+.chip-pago {
+  flex: 1;
+  min-width: 90px;
+  padding: 12px 10px;
+  border-radius: 12px;
+  border: 2px solid #f0e5d5;
+  background: var(--blanco);
+  color: var(--marron);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chip-pago.activo {
+  background: var(--turquesa);
+  border-color: var(--turquesa);
+  color: var(--blanco);
+}
+
+/* Resumen estilo recibo */
+.recibo {
+  background:
+    linear-gradient(var(--blanco), var(--blanco)) padding-box,
+    repeating-linear-gradient(0deg, #f0e5d5 0, #f0e5d5 4px, transparent 4px, transparent 6px) border-box;
+}
+
 .item-resumen {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  padding: 10px 0;
+  padding: 9px 0;
   border-bottom: 1px dashed #f0e5d5;
   font-size: 0.85rem;
 }
@@ -518,12 +698,17 @@ a {
   color: var(--gris);
 }
 
+.divisor-recibo {
+  border-top: 2px dashed var(--naranja-claro);
+  margin: 10px 0;
+}
+
 .total-final {
   display: flex;
   justify-content: space-between;
-  padding-top: 14px;
+  padding: 4px 0 14px;
   font-weight: 800;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: var(--marron);
 }
 
@@ -531,23 +716,24 @@ a {
   color: var(--naranja);
 }
 
-/* ----------------------- Confirmación ----------------------- */
+/* ----------------------- Confirmación ------------------------ */
 .confirmacion {
   text-align: center;
-  padding: 30px 10px;
+  padding: 26px 10px;
 }
 
 .confirmacion .circulo {
-  width: 74px;
-  height: 74px;
+  width: 78px;
+  height: 78px;
   border-radius: 50%;
   background: var(--turquesa);
   color: var(--blanco);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 2.4rem;
   margin: 0 auto 16px;
+  box-shadow: 0 10px 24px rgba(23, 162, 160, 0.35);
 }
 
 .confirmacion h2 {
@@ -562,12 +748,65 @@ a {
 }
 
 .confirmacion .nro-pedido {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 800;
   color: var(--naranja);
 }
 
-/* ----------------------- Mensajes / estados ----------------- */
+/* ----------------------- Toast de confirmación --------------- */
+.toast-confirmacion {
+  position: fixed;
+  top: 84px;
+  right: 16px;
+  left: 16px;
+  margin: 0 auto;
+  max-width: 360px;
+  background: var(--blanco);
+  color: var(--marron);
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+  border-left: 6px solid var(--turquesa);
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 60;
+  animation: toastEntrar 0.35s ease;
+  transition: opacity 0.4s ease;
+}
+
+.toast-confirmacion.oculto {
+  opacity: 0;
+}
+
+.check-toast {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--turquesa);
+  color: var(--blanco);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+@keyframes toastEntrar {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----------------------- Mensajes / estados ------------------ */
 .mensaje {
   padding: 14px 16px;
   border-radius: 12px;
@@ -601,10 +840,11 @@ a {
 
 .vacio {
   text-align: center;
-  padding: 30px 0;
+  padding: 30px 8px;
   color: var(--gris);
 }
 
+/* ----------------------- Footer ------------------------------- */
 .pie {
   background: var(--marron);
   color: rgba(255, 255, 255, 0.85);
@@ -618,37 +858,54 @@ a {
   color: var(--naranja-claro);
 }
 
-/* ----------------------- Responsive (>= 640px) -------------- */
-@media (min-width: 640px) {
-  .grid-tiendas {
-    grid-template-columns: repeat(2, 1fr);
-  }
+/* ============================================================
+   Responsive
+   ============================================================ */
 
+/* Tablets y pantallas >= 600px */
+@media (min-width: 600px) {
   .grid-productos {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .fila-2 {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+  .hero h2 {
+    font-size: 2rem;
   }
 
   .paso-checkout {
-    grid-template-columns: 1.2fr 0.8fr;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     align-items: start;
   }
 
-  .header .tienda-actual {
-    max-width: none;
+  .paso-checkout .tarjeta-form:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+
+  .header .logo {
+    width: 50px;
+    height: 50px;
   }
 }
 
+/* Desktop >= 960px */
 @media (min-width: 960px) {
-  .grid-tiendas {
+  .grid-productos {
     grid-template-columns: repeat(3, 1fr);
   }
 
+  .paso-checkout {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+
+  .paso-checkout .tarjeta-form:nth-child(3) {
+    grid-column: auto;
+  }
+}
+
+/* Pantallas muy grandes */
+@media (min-width: 1280px) {
   .grid-productos {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
