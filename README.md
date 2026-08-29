@@ -145,6 +145,9 @@ python -m http.server 8081 --directory panel-tienda
 | ------ | ---- | ----------- |
 | GET | `/api/tiendas` | Lista las 5 tiendas |
 | GET | `/api/tiendas/<id>/productos` | Catálogo por tienda (`?tipo=torta|bocadito`) |
+| GET | `/api/productos` | Lista productos para el panel (`?tienda_id=&tipo=`) |
+| POST | `/api/imagenes` | Sube una imagen a Cloudinary (multipart; requiere token) |
+| PATCH/DELETE | `/api/productos/<id>/imagen` | Actualiza/elimina la imagen de un producto (requiere token) |
 | POST | `/api/pedidos` | Crea un pedido y notifica a la tienda |
 | GET | `/api/pedidos?tienda_id=` | Lista pedidos por tienda (`&estado=`) |
 | PATCH | `/api/pedidos/<id>/estado` | Cambia el estado del pedido |
@@ -214,17 +217,40 @@ El proyecto incluye un blueprint `render.yaml` que crea **3 Web Services** y **2
 ### Consideraciones importantes de Render
 
 - **Puerto:** cada microservicio ya escucha en la variable `PORT` que inyecta Render (con `gunicorn app:app`).
-- **SQLite es efímero:** en el plan free, el disco se reinicia al redeploy y los pedidos/reservas se pierden. Para datos reales usa un **PostgreSQL** de Render (agrega `DATABASE_URL` en cada microservicio y configura `SQLALCHEMY_DATABASE_URI`). El código está preparado para migrar de SQLite a PostgreSQL.
+- **SQLite es efímero:** en el plan free de Render el disco se reinicia al redeploy y los pedidos/reservas se pierden. Por eso este proyecto usa **PostgreSQL** cuyas bases viven en **Alwaysdata** (ver "Bases de datos en Alwaysdata"). En `render.yaml` está la variable `DATABASE_URL` (con `sync: false`) para que la completes en el panel de Render apuntando a tu base de Alwaysdata.
+- **Cloudinary:** configura `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` y `CLOUDINARY_API_SECRET` en el servicio `sfa-pedidos` (en `render.yaml` están con `sync: false` para que las completes al aplicar el blueprint).
 - **Sleep del plan free:** los servicios de plan free se duermen tras ~15 min sin uso; la primera visita tarda unos segundos en "despertarlos".
 - **CORS:** el gateway permite todos los orígenes, así que los Static Sites pueden consumir la API sin problemas.
 
 ---
 
-## Desplegar en Alwaysdata (hosting europeo)
+## Desplegar con Alwaysdata (bases de datos en la nube)
 
-Alwaysdata ejecuta Python vía **WSGI (Phusion Passenger)**, no con `python app.py`. El repo ya incluye el archivo `passenger_wsgi.py` dentro de cada microservicio para ello.
+En esta arquitectura **las aplicaciones se despliegan en Render** y **las bases de datos (PostgreSQL) se alojan en Alwaysdata**, cada microservicio con la suya. También puedes desplegar las aplicaciones íntegramente en Alwaysdata si lo prefieres (ver más abajo).
 
-### Estructura de sitios (en tu panel Alwaysdata)
+### Bases de datos en Alwaysdata (PostgreSQL)
+
+1. En tu panel de **Alwaysdata** (https://admin.alwaysdata.com) crea **2 bases de datos PostgreSQL**:
+   - `nombre_bd_pedidos` → para el Microservicio 1.
+   - `nombre_bd_reservas` → para el Microservicio 2.
+
+   Cada microservicio debe tener **su propia base** (no se comparten).
+
+2. Alwaysdata te da una cadena de conexión similar a:
+   ```
+   postgresql://usuario:clave@db.alwaysdata.net:5432/nombre_bd_pedidos
+   ```
+   En Alwaysdata puedes habilitar el acceso externo (Remote SQL) para que Render pueda conectar.
+
+3. En **Render**, en el servicio `sfa-pedidos` define `DATABASE_URL` con la URL de `nombre_bd_pedidos`; en `sfa-separado` define `DATABASE_URL` con la URL de `nombre_bd_reservas`.
+
+4. Al arrancar, cada microservicio crea sus tablas y siembra los datos iniciales automáticamente (`create_all`).
+
+> **Nota:** el proyecto también soporta **MariaDB/MySQL** si prefieres — cambiarías la URL de conexión y añadirías `pymysql` a `requirements.txt`; el código no cambia.
+
+### (Alternativa) Desplegar todas las apps en Alwaysdata
+
+Alwaysdata ejecuta Python vía **WSGI (Phusion Passenger)**, no con `python app.py`. El repo ya incluye `passenger_wsgi.py` en cada microservicio.
 
 | Sitio | Tipo | Application path / carpeta | Entry point | URL sugerida |
 | ----- | ---- | -------------------------- | ----------- | ------------ |
@@ -234,12 +260,11 @@ Alwaysdata ejecuta Python vía **WSGI (Phusion Passenger)**, no con `python app.
 | `sfa-frontend` | Static | `frontend-cliente/` | — | `sfa-frontend.tu-usuario.alwaysdata.net` |
 | `sfa-panel` | Static | `panel-tienda/` | — | `sfa-panel.tu-usuario.alwaysdata.net` |
 
-### Pasos
+Pasos (solo si eliges esta alternativa):
 
 1. **Sube el código** al servidor (git clone, FTP o el "git deploy" de Alwaysdata).
 2. **Instala las dependencias** desde la carpeta del repo:
    ```bash
-   # Acceso SSH (o en VPS): crea/usa un entorno virtual
    mkdir -p ~/venvs && python3 -m venv ~/venvs/sfa && ~/venvs/sfa/bin/pip install -r requirements.txt
    ```
    Y configura ese entorno como "Python interpreter" de tus sitios Python (en Alwaysdata: Sites → tu sitio → Configuration).
@@ -248,14 +273,9 @@ Alwaysdata ejecuta Python vía **WSGI (Phusion Passenger)**, no con `python app.
    - `PEDIDOS_URL=https://sfa-pedidos.tu-usuario.alwaysdata.net`
    - `SEPARADO_URL=https://sfa-separado.tu-usuario.alwaysdata.net`
    - (opcional) `PANEL_USER`, `PANEL_PASSWORD`, `PANEL_TOKEN`.
+   - En cada microservicio, su `DATABASE_URL` (PostgreSQL local de Alwaysdata) y, en pedidos, las credenciales de Cloudinary.
    > Las variables del panel de Alwaysdata tienen prioridad sobre el `.env`.
 5. **Configura `API_BASE`** en `frontend-cliente/static/js/config.js` y `panel-tienda/static/js/config.js` con `https://sfa-gateway.tu-usuario.alwaysdata.net`.
-
-### Base de datos en Alwaysdata (SQLite)
-
-- El proyecto usa **SQLite** por servicio (`microservicio-pedidos/database/pedidos.db` y `microservicio-separado/database/reservas.db`). En Alwaysdata el disco es **persistente**, así que los datos sobreviven a reinicios y despliegues.
-- Los archivos se crean automáticamente al arrancar cada servicio (carpeta `database/`).
-- Atención: siempre haz **backup** de esas dos carpetas (o migra luego a MariaDB/PostgreSQL de Alwaysdata usando `DATABASE_URL`, está en el roadmap del proyecto).
 
 ---
 
@@ -270,5 +290,43 @@ Alwaysdata ejecuta Python vía **WSGI (Phusion Passenger)**, no con `python app.
 ## Stack
 
 - Flask 3, Flask-SQLAlchemy 3, Flask-CORS, Flask-Mail, python-dotenv, marshmallow, requests, gunicorn.
-- SQLite en desarrollo (migrable a PostgreSQL).
+- **Cloudinary** (imágenes de productos).
+- SQLite en desarrollo; **PostgreSQL en producción** (bases en Alwaysdata).
 - Frontend HTML5/CSS3/JS vanilla (Fetch API), Paleta de marca: marrón, naranja, naranja claro, turquesa y crema, tipografía Poppins, mobile-first.
+
+---
+
+## Imágenes con Cloudinary
+
+Las imágenes de los productos se guardan en **Cloudinary**. Cada producto tiene los campos:
+
+- `imagen_url`: URL pública de la imagen (la que consume el frontend).
+- `public_id`: identificador de la imagen en Cloudinary (para poder reemplazarla o eliminarla).
+
+### Configuración (variables de entorno)
+
+En tu **Cloudinary Dashboard** obtén el cloud name, API key y API secret y expón:
+
+```
+CLOUDINARY_CLOUD_NAME=tu-cloud-name
+CLOUDINARY_API_KEY=tu-api-key
+CLOUDINARY_API_SECRET=tu-api-secret
+```
+
+(Opcional) `CLOUDINARY_URL=cloudinary://api_key:api_secret@cloud_name`.
+
+Estas variables solo son necesarias en el **microservicio 1 (pedidos)**, que es quien gestiona los productos.
+
+### Cómo se usan
+
+- El **cliente** (`catalogo.html`) muestra `producto.imagen_url`. Si un producto aún no tiene imagen, la tarjeta muestra su color de marca.
+- El **panel de tienda** (`dashboard.html` → sección "Catálogo · Imágenes") permite:
+
+  1. Seleccionar un producto de la tienda.
+  2. Ver la imagen actual.
+  3. **Subir una imagen** (`POST /pedidos/api/imagenes`, multipart) que se carga a Cloudinary y se asocia al producto.
+  4. **Quitar la imagen** (`DELETE /pedidos/api/productos/<id>/imagen`).
+
+Ambas operaciones requieren token del panel (Bearer).
+
+---

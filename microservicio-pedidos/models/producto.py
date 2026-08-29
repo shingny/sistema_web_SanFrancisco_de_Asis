@@ -20,6 +20,9 @@ class Producto(db.Model):
     nombre = db.Column(db.String(120), nullable=False)
     descripcion = db.Column(db.String(300), default="")
     precio_base = db.Column(db.Float, nullable=False, default=0.0)
+    # URL pública de la imagen del producto en Cloudinary
+    imagen_url = db.Column(db.String(500), default="")
+    public_id = db.Column(db.String(300), default="")  # identificador en Cloudinary
     tamanos = db.Column(db.Text, default="[]")
     sabores = db.Column(db.Text, default="[]")
 
@@ -39,6 +42,8 @@ class Producto(db.Model):
             "nombre": self.nombre,
             "descripcion": self.descripcion,
             "precio_base": self.precio_base,
+            "imagen_url": self.imagen_url or "",
+            "public_id": self.public_id or "",
             "tamanos": self._parsear_lista(self.tamanos),
             "sabores": self._parsear_lista(self.sabores),
         }

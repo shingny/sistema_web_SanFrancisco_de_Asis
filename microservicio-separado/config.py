@@ -23,8 +23,12 @@ class Config:
     HOST = os.getenv("SEPARADO_HOST", "0.0.0.0")
     PORT = int(os.getenv("PORT") or os.getenv("SEPARADO_PORT") or "5002")
 
-    # SQLite en desarrollo; migrable a PostgreSQL en producción.
-    SQLALCHEMY_DATABASE_URI = "sqlite:///" + str(DATABASE_DIR / "reservas.db")
+    # Base de datos: si existe DATABASE_URL (PostgreSQL en Alwaysdata/Render),
+    # se usa esa; en caso contrario se usa SQLite local.
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        "DATABASE_URL",
+        os.getenv("DATABASE_URL_SEPARADO", "sqlite:///" + str(DATABASE_DIR / "reservas.db")),
+    )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     SECRET_KEY = os.getenv("SECRET_KEY", "cambio-en-produccion")

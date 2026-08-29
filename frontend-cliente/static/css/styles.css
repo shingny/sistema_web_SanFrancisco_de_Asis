@@ -295,6 +295,24 @@ a {
   justify-content: center;
 }
 
+.tarjeta-producto .portada.con-imagen {
+  position: relative;
+  padding: 0;
+}
+
+.tarjeta-producto .portada.con-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tarjeta-producto .portada.con-imagen span {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+
 .tarjeta-producto.torta .portada {
   background: linear-gradient(135deg, var(--marron), #a3481a);
 }

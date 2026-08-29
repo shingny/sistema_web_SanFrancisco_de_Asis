@@ -34,6 +34,29 @@
     <!-- ===================== SEPARADO / RESERVAS ================= -->
     <h2 class="titulo-seccion">Separado de tortas <span class="etiqueta">Microservicio 2</span></h2>
     <section id="kanban-reservas" class="kanban"></section>
+
+    <!-- ================= GESTIÓN DE IMÁGENES ==================== -->
+    <h2 class="titulo-seccion">Catálogo · Imágenes <span class="etiqueta">Cloudinary</span></h2>
+    <section class="panel-imagenes">
+      <div class="tarjeta-imagen">
+        <label for="select-producto">Producto</label>
+        <select id="select-producto">
+          <option value="">Cargando productos...</option>
+        </select>
+      </div>
+
+      <div class="tarjeta-imagen preview">
+        <div class="preview-titulo">Imagen actual</div>
+        <div id="preview-imagen" class="preview-vacio">Selecciona un producto para ver su imagen.</div>
+      </div>
+
+      <div class="tarjeta-imagen accion">
+        <label for="input-imagen">Nueva imagen (JPG / PNG / WebP)</label>
+        <input type="file" id="input-imagen" accept="image/png,image/jpeg,image/webp" />
+        <button id="btn-subir" class="btn btn-primario" disabled>Subir imagen a Cloudinary</button>
+        <button id="btn-quitar" class="btn btn-secundario" disabled>Quitar imagen</button>
+      </div>
+    </section>
   </main>
 
   <script src="static/js/config.js"></script>

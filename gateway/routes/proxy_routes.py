@@ -77,15 +77,31 @@ def proxy(ruta):
     if request.query_string:
         url += "?" + request.query_string.decode("utf-8")
 
-    cabeceras = {"Content-Type": "application/json"}
-    cuerpo = None
-    if request.method in ("POST", "PATCH", "PUT"):
-        cuerpo = request.get_json(silent=True)
-
+    # Reenvío de la petición al microservicio.
+    # Se hace una distinción entre JSON y multipart (subida de imágenes).
     try:
-        respuesta = requests.request(
-            request.method, url, json=cuerpo, headers=cabeceras, timeout=30
-        )
+        if request.method in ("POST", "PATCH", "PUT"):
+            if request.mimetype == "multipart/form-data":
+                cuerpo = request.data
+                cabeceras = {"Content-Type": request.content_type}
+                respuesta = requests.request(
+                    request.method,
+                    url,
+                    data=cuerpo,
+                    headers=cabeceras,
+                    timeout=60,
+                )
+            else:
+                cabeceras = {"Content-Type": "application/json"}
+                cuerpo = request.get_json(silent=True)
+                respuesta = requests.request(
+                    request.method, url, json=cuerpo, headers=cabeceras, timeout=60
+                )
+        else:
+            cabeceras = {"Content-Type": "application/json"}
+            respuesta = requests.request(
+                request.method, url, headers=cabeceras, timeout=60
+            )
     except requests.exceptions.ConnectionError:
         return jsonify({"error": "Microservicio de destino no disponible"}), 502
     except requests.exceptions.Timeout:

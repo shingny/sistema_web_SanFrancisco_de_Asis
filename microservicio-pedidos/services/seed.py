@@ -4,9 +4,12 @@ Crea las 5 tiendas y el catálogo de tortas y bocaditos de cada tienda
 si la base de datos está vacía.
 """
 
+import json
+
 from app import db
 from models.producto import Producto
 from models.tienda import Tienda
+from services.cloudinary_service import url_placeholder_por_nombre
 
 TIENDAS = [
     {
@@ -130,7 +133,23 @@ def seed_database():
     tiendas = Tienda.query.all()
     for tienda in tiendas:
         for torta in TORTAS:
-            db.session.add(Producto(tienda_id=tienda.id, tipo="torta", **torta))
+            producto = Producto(tienda_id=tienda.id, tipo="torta", **torta)
+            _serializar_opciones(producto)
+            db.session.add(producto)
         for bocadito in BOCADITOS:
-            db.session.add(Producto(tienda_id=tienda.id, tipo="bocadito", **bocadito))
+            producto = Producto(tienda_id=tienda.id, tipo="bocadito", **bocadito)
+            _serializar_opciones(producto)
+            db.session.add(producto)
     db.session.commit()
+
+
+def _serializar_opciones(producto):
+    """Convierte las listas de tamaños/sabores a su representación JSON en Text.
+
+    El modelo almacena `tamanos` y `sabores` como cadenas JSON; al sembrar
+    pasan como listas, por lo que las serializamos antes de guardar.
+    """
+    producto.tamanos = json.dumps(producto.tamanos or [])
+    producto.sabores = json.dumps(producto.sabores or [])
+    if not producto.imagen_url:
+        producto.imagen_url = url_placeholder_por_nombre(producto.nombre)

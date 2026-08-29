@@ -68,9 +68,14 @@ document.addEventListener("DOMContentLoaded", () => {
       tarjeta.className = `tarjeta-producto ${producto.tipo}`;
 
       const textoClase = producto.tipo === "torta" ? "TORTAS" : "BOCADITOS";
+      const imagen = producto.imagen_url || "";
+
+      const portada = imagen
+        ? `<div class="portada con-imagen"><img src="${imagen}" alt="${producto.nombre}" loading="lazy" /><span>${textoClase}</span></div>`
+        : `<div class="portada"><span>${textoClase}</span></div>`;
 
       tarjeta.innerHTML = `
-        <div class="portada"><span>${textoClase}</span></div>
+        ${portada}
         <div class="cuerpo">
           <div>
             <div class="nombre">${producto.nombre}</div>

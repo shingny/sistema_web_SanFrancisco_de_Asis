@@ -28,6 +28,19 @@ services:
     buildCommand: pip install -r ../requirements.txt
     startCommand: gunicorn app:app
     healthCheckPath: /
+    envVars:
+      # Base de datos PostgreSQL en Alwaysdata (cada microservicio la suya).
+      # Sustituye por tu conexión real:
+      #   postgresql://usuario:clave@db.alwaysdata.net:5432/nombre_bd_pedidos
+      - key: DATABASE_URL
+        sync: false
+      # Credenciales de Cloudinary (Dashboard de tu cuenta).
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
 
   # ------------- Microservicio 2: Separado de tortas ----------
   - type: web
@@ -38,6 +51,10 @@ services:
     buildCommand: pip install -r ../requirements.txt
     startCommand: gunicorn app:app
     healthCheckPath: /
+    envVars:
+      # postgresql://usuario:clave@db.alwaysdata.net:5432/nombre_bd_reservas
+      - key: DATABASE_URL
+        sync: false
 
   # -------------------- API Gateway --------------------------
   - type: web

@@ -450,6 +450,77 @@ body {
   font-size: 0.82rem;
 }
 
+/* ----------- Gestor de imágenes de productos ------------ */
+.panel-imagenes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.tarjeta-imagen {
+  background: var(--blanco);
+  border-radius: 14px;
+  box-shadow: var(--sombra);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tarjeta-imagen label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--marron);
+}
+
+.tarjeta-imagen select,
+.tarjeta-imagen input[type="file"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #f0e5d5;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  background: var(--crema);
+  color: var(--marron);
+}
+
+.tarjeta-imagen .preview-titulo {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--marron);
+}
+
+.preview-vacio {
+  text-align: center;
+  padding: 22px 10px;
+  background: var(--crema);
+  border-radius: 10px;
+  color: var(--gris);
+  font-size: 0.82rem;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#preview-imagen img {
+  max-width: 100%;
+  max-height: 220px;
+  border-radius: 10px;
+  display: block;
+}
+
+.tarjeta-imagen.accion {
+  gap: 12px;
+}
+
+.tarjeta-imagen.accion .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* ----------- Responsive ------------ */
 @media (min-width: 800px) {
   .kanban {
@@ -458,5 +529,14 @@ body {
 
   .kanban-reservas {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  .panel-imagenes {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .panel-imagenes .tarjeta-imagen.accion {
+    grid-column: 1 / -1;
+    max-width: 480px;
   }
 }
